@@ -6,9 +6,6 @@ type Props = {
 
 }
 export const Posts: React.FC<Props> = ({ posts, handleClick }) => {
-
-
-
     return ( 
         <div className="grid grid-cols-3 gap-4 mx-auto">
       {posts.map((item) => (
