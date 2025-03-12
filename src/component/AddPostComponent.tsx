@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { API_URL } from "../service/common";
 
 
@@ -18,7 +18,7 @@ export interface PostInput {
 
 }
 export const AddPostComponent = ({handlePostSubmit}: Props) => {
-
+    const fromRef = useRef<HTMLFormElement>(null);
     const [users, setUsers] = useState<User[]>([]);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -60,7 +60,7 @@ export const AddPostComponent = ({handlePostSubmit}: Props) => {
     
     return ( 
         <div>
-      <form onSubmit={handleSubmit} className="grid grid-cols-2">
+      <form onSubmit={handleSubmit} ref={fromRef} className="grid grid-cols-2">
         <label htmlFor="title">Title:</label>
         <input
           id="title"
@@ -93,8 +93,8 @@ export const AddPostComponent = ({handlePostSubmit}: Props) => {
             </option>
           ))}
         </select>
-        <button type="submit">Add Post</button>
       </form>
+      <button onClick={() => {fromRef.current && fromRef.current.requestSubmit()}}>Add</button>
     </div>
     );
 }
