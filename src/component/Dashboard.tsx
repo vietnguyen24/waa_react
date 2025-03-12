@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {Posts} from './Posts';
 import { Post } from "./Post";
 import { PostDetail } from "./PostDetail";
 import axios from "axios";
 import {API_URL} from "../service/common"
 import { AddPostComponent, PostInput } from "./AddPostComponent";
+import { PostDetailContext } from "../PostDetailContext";
 
 
 
@@ -20,7 +21,9 @@ import { AddPostComponent, PostInput } from "./AddPostComponent";
 const Dashboard: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [title, setTitle] = useState("");
-    const [postDetail, setPostDetail] = useState<Post | null >(null);
+    const context = useContext(PostDetailContext);
+    const postDetail = context?.postDetail;
+    const setPostDetail = context.setPostDetail;
     const [showAddForm, setShowAddForm] = useState(false);
     const [refresh, setRefresh] = useState(0);
 
@@ -45,7 +48,7 @@ const Dashboard: React.FC = () => {
         setTitle(e.target.value);
     }
 
-    const handleClick = (post:Post) => {
+    const handleClickPost = (post:Post) => {
         setPostDetail(post);
     }
 
@@ -65,7 +68,7 @@ const Dashboard: React.FC = () => {
     }
 
     return (<>
-        <Posts posts={posts} handleClick={handleClick}/>
+        <Posts posts={posts} handleClick={handleClickPost}/>
         <label htmlFor="title">Title:</label>
         <input className="border-2 m-2" type="text" name="title" id="title"  value={title} onChange={onChangeTitle}  placeholder="Enter title"/>
         <button

@@ -1,13 +1,15 @@
 
+
 import './App.css';
-import Dashboard from './component/Dashboard'
+import Dashboard from './component/Dashboard';
+import {PostDetailProvider} from "./PostDetailContext";
 
 function App() {
 
   return (
-    <>
-      <Dashboard/>
-    </>
+    <PostDetailProvider>
+    <Dashboard />
+  </PostDetailProvider>
   )
 }
 
