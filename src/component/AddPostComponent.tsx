@@ -2,22 +2,27 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_URL } from "../service/common";
 
+
 type Props = {
- 
+ handlePostSubmit: (post: PostInput) => void;
 }
 
 interface User {
     id: number;
     name : string;
 }
-export const AddPostComponent = ({}: Props) => {
+export interface PostInput {
+    title: string;
+    userId: number;
+    content: string;
+
+}
+export const AddPostComponent = ({handlePostSubmit}: Props) => {
 
     const [users, setUsers] = useState<User[]>([]);
     const [title, setTitle] = useState("");
-    const [author, setAuthor] = useState("");
     const [content, setContent] = useState("");
     const [selectedUser, setSelectedUser] = useState<number | null>(null);
-
 
         useEffect(
             () => {
@@ -33,14 +38,18 @@ export const AddPostComponent = ({}: Props) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const newPost = {
+        if (selectedUser === null) {
+          console.error("User must be selected");
+          return;
+        }
+        const newPost: PostInput = {
           title,
-          author,
           content,
           userId: selectedUser,
         };
-        axios.post(`${API_URL}/users`, newPost)
+        axios.post(`${API_URL}/posts`, newPost)
         .then(response => {
+            handlePostSubmit(newPost);
             console.log("RESPONSE:", response.data)
         })
         .catch(err => console.log(err.message))
@@ -51,7 +60,7 @@ export const AddPostComponent = ({}: Props) => {
     
     return ( 
         <div>
-      <form onSubmit={handleSubmit} className="grid grid-cols-1">
+      <form onSubmit={handleSubmit} className="grid grid-cols-2">
         <label htmlFor="title">Title:</label>
         <input
           id="title"
@@ -59,14 +68,6 @@ export const AddPostComponent = ({}: Props) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Enter title"
-        />
-        <label htmlFor="author">Author:</label>
-        <input
-          id="author"
-          name="author"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-          placeholder="Enter author"
         />
         <label htmlFor="content">Content:</label>
         <textarea

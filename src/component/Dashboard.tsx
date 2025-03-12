@@ -4,7 +4,7 @@ import { Post } from "./Post";
 import { PostDetail } from "./PostDetail";
 import axios from "axios";
 import {API_URL} from "../service/common"
-import { AddPostComponent } from "./AddPostComponent";
+import { AddPostComponent, PostInput } from "./AddPostComponent";
 
 
 
@@ -22,6 +22,7 @@ const Dashboard: React.FC = () => {
     const [title, setTitle] = useState("");
     const [postDetail, setPostDetail] = useState<Post | null >(null);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [refresh, setRefresh] = useState(0);
 
 
     useEffect(
@@ -33,7 +34,7 @@ const Dashboard: React.FC = () => {
                 })
                 .catch(err => console.log(err.message))
         },
-        []);
+        [refresh]);
 
 
     const changeName = () => {
@@ -58,6 +59,11 @@ const Dashboard: React.FC = () => {
         setShowAddForm(true);
     }
 
+    function onSubmitPostForm(post: PostInput): void {
+        setShowAddForm(false);
+        setRefresh(prev => prev + 1);
+    }
+
     return (<>
         <Posts posts={posts} handleClick={handleClick}/>
         <label htmlFor="title">Title:</label>
@@ -68,7 +74,7 @@ const Dashboard: React.FC = () => {
         <button
          className="border-2 m-2 border-black bg-blue-500 text-black p-2 rounded"
           onClick={handleAddPost}>Add Post</button>
-          {showAddForm? <AddPostComponent/> : ""}
+          {showAddForm? <AddPostComponent handlePostSubmit={onSubmitPostForm}/> : ""}
         {postDetail? 
         <PostDetail id={postDetail.id} handleDelete={handleDelete}/>
           :""}
