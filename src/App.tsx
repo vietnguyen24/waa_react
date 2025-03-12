@@ -1,15 +1,17 @@
 
 
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import Dashboard from './component/Dashboard';
-import {PostDetailProvider} from "./PostDetailContext";
+
 
 function App() {
 
   return (
-    <PostDetailProvider>
+    <BrowserRouter>
     <Dashboard />
-  </PostDetailProvider>
+    </BrowserRouter>
+
   )
 }
 

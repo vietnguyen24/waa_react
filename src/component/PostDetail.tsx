@@ -1,17 +1,17 @@
 
 import axios from "axios";
-import { Post } from "./Post";
+
 import { API_URL } from "../service/common";
 import { useEffect, useState } from "react";
+import { Post } from "./PostComponent";
+import { useParams } from "react-router";
 
 
-type Props = {
- id: Number|undefined;
- handleDelete: (id:number) => void
-}
-export const PostDetail = ({id, handleDelete}: Props) => {
+
+export const PostDetail = () => {
     const [post, setPost] = useState<Post|null>(null);
-
+    const params = useParams();
+    const id = params.id;
 
     useEffect(
         () => {
@@ -31,17 +31,19 @@ export const PostDetail = ({id, handleDelete}: Props) => {
                 axios.delete(`${API_URL}/posts/${id}`)
                 .then(response => {
                     console.log("RESPONSE:", response.data)
-                    setPost(null);
-                    handleDelete(post.id);
+                    // setPosts(posts.filter(p => p.id !== postDetail?.id));
+                    // setPostDetail(null);
                 })
                 .catch(err => console.log(err.message));
+
+            //   handleDelete(post.id);
               console.log("handledelete " + post.id);
             }
           };
 
 
     return ( 
-        <>
+        <div className="m-10">
         {post? 
         <div className="border-2 border-black w-200 h-50">
             <h1>{post.title}</h1>
@@ -53,6 +55,6 @@ export const PostDetail = ({id, handleDelete}: Props) => {
             <button onClick={handleDeleteClick}>Delete</button>
         </div>
         : <p>No Data</p>}
-        </>
+        </div>
     );
 }

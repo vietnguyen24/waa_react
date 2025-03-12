@@ -3,9 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { API_URL } from "../service/common";
 
 
-type Props = {
- handlePostSubmit: (post: PostInput) => void;
-}
 
 interface User {
     id: number;
@@ -17,7 +14,7 @@ export interface PostInput {
     content: string;
 
 }
-export const AddPostComponent = ({handlePostSubmit}: Props) => {
+export const AddPostComponent = () => {
     const fromRef = useRef<HTMLFormElement>(null);
     const [users, setUsers] = useState<User[]>([]);
     const [title, setTitle] = useState("");
@@ -49,7 +46,7 @@ export const AddPostComponent = ({handlePostSubmit}: Props) => {
         };
         axios.post(`${API_URL}/posts`, newPost)
         .then(response => {
-            handlePostSubmit(newPost);
+            // handlePostSubmit(newPost);
             console.log("RESPONSE:", response.data)
         })
         .catch(err => console.log(err.message))
@@ -59,7 +56,7 @@ export const AddPostComponent = ({handlePostSubmit}: Props) => {
 
     
     return ( 
-        <div>
+        <div  className=" w-max">
       <form onSubmit={handleSubmit} ref={fromRef} className="grid grid-cols-2">
         <label htmlFor="title">Title:</label>
         <input
